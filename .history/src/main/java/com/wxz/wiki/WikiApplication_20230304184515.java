@@ -1,4 +1,4 @@
-package com.wxz.wiki;
+package com.jiawa.wiki;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,8 @@ public class WikiApplication {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(WikiApplication.class);
 		Environment env = app.run(args).getEnvironment();
-		LOG.info("start success");
-		LOG.info("address:\thttp://127.0.0.1:{}", env.getProperty("server.port"));
+		LOG.info("启动成功！！");
+		LOG.info("地址: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
 	}
 
 }

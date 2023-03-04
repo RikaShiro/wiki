@@ -8,14 +8,13 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class WikiApplication {
-
 	private static final Logger LOG = LoggerFactory.getLogger(WikiApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(WikiApplication.class);
 		Environment env = app.run(args).getEnvironment();
-		LOG.info("start success");
-		LOG.info("address:\thttp://127.0.0.1:{}", env.getProperty("server.port"));
+		LOG.info("run success");
+		LOG.info("address: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
 	}
 
 }
