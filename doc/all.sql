@@ -5,5 +5,7 @@
 --   password varchar(50),
 --   primary key(id)
 -- ) engine = innodb default charset = utf8mb4;
+-- insert into test (id, name, password)
+-- values(1, 'abc', 'password');
 insert into test (id, name, password)
-values(1, 'abc', 'password');
+values(2, 'zzz', 'password');
