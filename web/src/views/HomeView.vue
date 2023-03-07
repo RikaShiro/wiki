@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-sider width="200" style="background: #fff">
-      <a-menu v-model:selectedKeys="selectedKeys2" v-model:openKeys="openKeys" mode="inline"
+      <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline"
         :style="{ height: '100%', borderRight: 0 }">
         <a-sub-menu key="sub1">
           <template #title>
@@ -65,8 +65,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      selectedKeys1: ref<string[]>(['2']),
-      selectedKeys2: ref<string[]>(['1']),
+      selectedKeys: ref<string[]>(['1']),
       collapsed: ref<boolean>(false),
       openKeys: ref<string[]>(['sub1']),
     };
