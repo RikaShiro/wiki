@@ -8,7 +8,6 @@ import SupportIcon from './icons/IconSupport.vue'
 </script>
 
 <template>
-  <a-button type="primary">Primary Button</a-button>
   <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
