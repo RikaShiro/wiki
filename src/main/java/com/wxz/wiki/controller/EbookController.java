@@ -8,8 +8,9 @@ import com.wxz.wiki.service.EbookService;
 
 import jakarta.annotation.Resource;
 
-import com.wxz.wiki.domain.Ebook;
+import com.wxz.wiki.req.EbookReq;
 import com.wxz.wiki.resp.CommonResp;
+import com.wxz.wiki.resp.EbookResp;
 
 import java.util.List;
 
@@ -21,9 +22,9 @@ public class EbookController {
   private EbookService ebookService;
 
   @GetMapping("/list")
-  public CommonResp<List<Ebook>> list() {
-    CommonResp<List<Ebook>> resp = new CommonResp<>();
-    resp.setContent(ebookService.list());
+  public CommonResp<List<EbookResp>> list(EbookReq req) {
+    CommonResp<List<EbookResp>> resp = new CommonResp<>();
+    resp.setContent(ebookService.list(req));
     return resp;
   }
 }
