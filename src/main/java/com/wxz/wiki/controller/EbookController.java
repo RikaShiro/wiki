@@ -23,8 +23,7 @@ public class EbookController {
   @GetMapping("/list")
   public CommonResp<List<Ebook>> list() {
     CommonResp<List<Ebook>> resp = new CommonResp<>();
-    List<Ebook> list = ebookService.list();
-    resp.setContent(list);
+    resp.setContent(ebookService.list());
     return resp;
   }
 }

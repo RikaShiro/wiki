@@ -1,6 +1,7 @@
 package com.wxz.wiki.resp;
 
 public class CommonResp<T> {
+
   /**
    * 业务上的成功或失败
    */
