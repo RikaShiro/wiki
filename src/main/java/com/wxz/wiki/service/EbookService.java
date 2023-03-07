@@ -11,6 +11,7 @@ import com.wxz.wiki.domain.EbookExample;
 import com.wxz.wiki.mapper.EbookMapper;
 import com.wxz.wiki.req.EbookReq;
 import com.wxz.wiki.resp.EbookResp;
+import com.wxz.wiki.util.CopyUtil;
 
 import jakarta.annotation.Resource;
 
@@ -24,13 +25,6 @@ public class EbookService {
     EbookExample.Criteria criteria = ebookExample.createCriteria();
     criteria.andNameLike("%" + req.getName() + "%");
     List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
-    List<EbookResp> arr = new ArrayList<>();
-    for (Ebook e : ebookList) {
-      EbookResp ebookResp = new EbookResp();
-      BeanUtils.copyProperties(e, ebookResp);
-      ebookResp.setId(12345L);
-      arr.add(ebookResp);
-    }
-    return arr;
+    return CopyUtil.copyList(ebookList, EbookResp.class);
   }
 }
