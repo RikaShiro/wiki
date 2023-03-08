@@ -92,7 +92,8 @@ export default defineComponent({
     const loading = ref(true)
     const ebooks = ref()
     onMounted(() => {
-      axios.get('http://localhost:9999/ebook/list').then((res) => {
+      // console.log(111)
+      axios.get(`/ebook/list`).then((res) => {
         ebooks.value = res.data.content
         loading.value = false
       })
