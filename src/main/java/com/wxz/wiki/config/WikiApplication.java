@@ -1,4 +1,4 @@
-package com.wxz.wiki;
+package com.wxz.wiki.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
