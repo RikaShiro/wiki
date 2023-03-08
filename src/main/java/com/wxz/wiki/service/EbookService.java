@@ -1,9 +1,6 @@
 package com.wxz.wiki.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.wxz.wiki.domain.Ebook;

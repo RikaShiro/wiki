@@ -48,7 +48,7 @@
         <a-breadcrumb-item>App</a-breadcrumb-item>
       </a-breadcrumb>
       <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
-        Content
+        <pre>{{ ebooks }}</pre>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons-vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios'
 export default defineComponent({
   components: {
@@ -65,10 +65,17 @@ export default defineComponent({
     NotificationOutlined,
   },
   setup() {
-    axios.get('http://localhost:9999/ebook/list?name=Spring').then((res) => {
-      console.log(res)
+    const ebooks = ref()
+    console.log('setup')
+    onMounted(() => {
+      console.log('onMounted')
+      axios.get('http://localhost:9999/ebook/list?name=Spring').then((res) => {
+        ebooks.value = ref(res.data.content)
+        console.log(res)
+      })
     })
     return {
+      ebooks,
       selectedKeys: ref<string[]>(['1']),
       collapsed: ref<boolean>(false),
       openKeys: ref<string[]>(['sub1']),
