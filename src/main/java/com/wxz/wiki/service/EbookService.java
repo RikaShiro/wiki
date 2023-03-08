@@ -2,6 +2,7 @@ package com.wxz.wiki.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.wxz.wiki.domain.Ebook;
 import com.wxz.wiki.domain.EbookExample;
@@ -19,8 +20,10 @@ public class EbookService {
 
   public List<EbookResp> list(EbookReq req) {
     EbookExample ebookExample = new EbookExample();
-    EbookExample.Criteria criteria = ebookExample.createCriteria();
-    criteria.andNameLike("%" + req.getName() + "%");
+    if (!ObjectUtils.isEmpty(req.getName())) {
+      EbookExample.Criteria criteria = ebookExample.createCriteria();
+      criteria.andNameLike("%" + req.getName() + "%");
+    }
     List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
     return CopyUtil.copyList(ebookList, EbookResp.class);
   }
