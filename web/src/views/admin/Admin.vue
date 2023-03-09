@@ -10,7 +10,7 @@
         <a-button danger>Delete</a-button>
       </template>
       <template v-else>
-        {{ record[column.dataIndex] ? record[column.dataIndex] : 'null'}}
+        {{ record[column.dataIndex] ? record[column.dataIndex] : 'null' }}
       </template>
     </template>
   </a-table>
@@ -19,6 +19,7 @@
 <script lang="ts">
 import axios from 'axios';
 import { ref, defineComponent, onMounted } from 'vue';
+
 const columns = [
   {
     title: 'Cover',
@@ -69,14 +70,21 @@ export default defineComponent({
     const loading = ref(false)
     const pagination = ref({
       current: 1,
-      pageSize: 2,
+      pageSize: 10,
       total: 0
     })
     const queryData = (params: any) => {
       loading.value = true
-      axios.get('/ebook/list', params).then((res) => {
-        ebooks.value = res.data.content
+      axios.get('/ebook/list', {
+        params: {
+          page: params.page,
+          size: params.size
+        }
+      }).then((res) => {
+        const $ = res.data.content
+        ebooks.value = $.list
         pagination.value.current = params.page
+        pagination.value.total = $.total
         loading.value = false
       })
     }
@@ -87,7 +95,7 @@ export default defineComponent({
       })
     }
     onMounted(() => {
-      queryData({})
+      queryData({ page: 1, size: pagination.value.pageSize })
     })
     return {
       ebooks,
