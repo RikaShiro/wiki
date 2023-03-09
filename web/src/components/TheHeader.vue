@@ -3,7 +3,7 @@
     <div class="logo"></div>
     <a-menu v-model:selectedKeys="selectedKeys1" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
       <a-menu-item key="home">
-        <RouterLink to="">Home</RouterLink>
+        <RouterLink to="/">Home</RouterLink>
       </a-menu-item>
       <a-menu-item key="admin">
         <RouterLink to="/admin">Manage</RouterLink>

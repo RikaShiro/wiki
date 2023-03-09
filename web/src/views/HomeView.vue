@@ -89,20 +89,21 @@ export default defineComponent({
     MessageOutlined,
   },
   setup() {
-    const loading = ref(true)
+    const loading = ref(false)
     const ebooks = ref()
-    onMounted(() => {
-      // console.log(111)
-      axios.get(`/ebook/list`).then((res) => {
-        ebooks.value = res.data.content
-        loading.value = false
-      })
-    })
     const actions: Record<string, string>[] = [
       { type: 'StarOutlined', text: '156' },
       { type: 'LikeOutlined', text: '156' },
       { type: 'MessageOutlined', text: '2' },
     ];
+    onMounted(() => {
+      loading.value = true
+      axios.get(`/ebook/list`).then((res) => {
+        ebooks.value = res.data.content
+        loading.value = false
+      })
+    })
+
     return {
       selectedKeys: ref<string[]>(['1']),
       collapsed: ref<boolean>(false),
