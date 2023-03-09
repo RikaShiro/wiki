@@ -55,6 +55,7 @@
 import axios from 'axios';
 import { ref, defineComponent, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
+import { Tool } from '@/util/tool';
 
 const columns = [
   {
@@ -162,7 +163,7 @@ export default defineComponent({
     }
     const showEditModal = (record: any) => {
       editVisible.value = true
-      ebook.value = record
+      ebook.value = Tool.copy(record)
     }
     const add = () => {
       editVisible.value = true
