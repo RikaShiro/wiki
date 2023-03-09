@@ -11,8 +11,7 @@ import jakarta.annotation.Resource;
 import com.wxz.wiki.req.EbookReq;
 import com.wxz.wiki.resp.CommonResp;
 import com.wxz.wiki.resp.EbookResp;
-
-import java.util.List;
+import com.wxz.wiki.resp.PageResp;
 
 @RestController
 @RequestMapping("/ebook")
@@ -22,8 +21,8 @@ public class EbookController {
   private EbookService ebookService;
 
   @GetMapping("/list")
-  public CommonResp<List<EbookResp>> list(EbookReq req) {
-    CommonResp<List<EbookResp>> resp = new CommonResp<>();
+  public CommonResp<PageResp<EbookResp>> list(EbookReq req) {
+    CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
     resp.setContent(ebookService.list(req));
     return resp;
   }
