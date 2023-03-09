@@ -112,10 +112,14 @@ export default defineComponent({
           size: params.size
         }
       }).then((res) => {
-        const $ = res.data.content
-        ebooks.value = $.list
-        pagination.value.current = params.page
-        pagination.value.total = parseInt($.total)
+        const $ = res.data
+        if ($.success) {
+          ebooks.value = $.content.list
+          pagination.value.current = params.page
+          pagination.value.total = parseInt($.content.total)
+        } else {
+          message.error($.message)
+        }
         loading.value = false
       })
     }
@@ -131,15 +135,17 @@ export default defineComponent({
         const $ = res.data
         if ($.success) {
           setTimeout(() => {
-            editLoading.value = false
-            editVisible.value = false
             // reload list
             queryData({
               page: pagination.value.current,
               size: pagination.value.pageSize
             })
           }, 1000)
+        } else {
+          message.error($.message)
         }
+        editLoading.value = false
+        editVisible.value = false
       })
     }
     const showEditModal = (record: any) => {

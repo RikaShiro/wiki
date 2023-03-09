@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 
 import com.wxz.wiki.service.EbookService;
 import com.wxz.wiki.req.EbookQueryReq;
@@ -25,7 +26,7 @@ public class EbookController {
   private EbookService ebookService;
 
   @GetMapping("/list")
-  public CommonResp<PageResp<EbookQueryResp>> list(EbookQueryReq req) {
+  public CommonResp<PageResp<EbookQueryResp>> list(@Valid EbookQueryReq req) {
     CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
     resp.setContent(ebookService.list(req));
     return resp;
@@ -33,7 +34,7 @@ public class EbookController {
 
   @PostMapping("/save")
   // @RequestBody = post json
-  public CommonResp save(@RequestBody EbookSaveReq req) {
+  public CommonResp save(@Valid @RequestBody EbookSaveReq req) {
     CommonResp resp = new CommonResp<>();
     ebookService.save(req);
     return resp;
