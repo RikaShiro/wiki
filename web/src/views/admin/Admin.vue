@@ -6,7 +6,7 @@
         <img src="/image/cover1.png">
       </template>
       <template v-else-if="column.key === 'action'">
-        <a-button type="primary">Edit</a-button>
+        <a-button type="primary" @click="showEditModal">Edit</a-button>
         <a-button danger>Delete</a-button>
       </template>
       <template v-else>
@@ -14,6 +14,9 @@
       </template>
     </template>
   </a-table>
+  <a-modal v-model:visible="editVisible" title="Basic Modal" @ok="editHandleOk">
+    <p>Edit</p>
+  </a-modal>
 </template>
 
 <script lang="ts">
@@ -73,6 +76,8 @@ export default defineComponent({
       pageSize: 10,
       total: 0
     })
+    const editVisible = ref(false)
+
     const queryData = (params: any) => {
       loading.value = true
       axios.get('/ebook/list', {
@@ -94,15 +99,25 @@ export default defineComponent({
         size: pagination.value.pageSize
       })
     }
+    const editHandleOk = () => {
+      editVisible.value = false
+    }
+    const showEditModal = () => {
+      editVisible.value = true
+    }
     onMounted(() => {
       queryData({ page: 1, size: pagination.value.pageSize })
     })
     return {
-      ebooks,
       loading,
+      ebooks,
       pagination,
       columns,
-      handleTableChange
+      handleTableChange,
+
+      editVisible,
+      showEditModal,
+      editHandleOk
     }
   }
 })
