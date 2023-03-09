@@ -1,4 +1,6 @@
 <template>
+  <a-button type="primary" size="large" @click="add">Add</a-button>
+
   <a-table :columns="columns" :data-source="ebooks" :pagination="pagination" :loading="loading"
     @change="handleTableChange">
     <template #bodyCell="{ column, record }">
@@ -7,15 +9,18 @@
       </template>
       <template v-else-if="column.key === 'action'">
         <a-button type="primary" @click="showEditModal(record)">Edit</a-button>
-        <a-button danger>Delete</a-button>
+        <a-popconfirm title="Are you sure delete this task?" ok-text="Yes" cancel-text="No"
+          @confirm="confirmDelete(record.id)" @cancel="cancelDelete">
+          <a-button danger>Delete</a-button>
+        </a-popconfirm>
       </template>
       <template v-else>
         {{ record[column.dataIndex] ? record[column.dataIndex] : 'null' }}
       </template>
     </template>
   </a-table>
-  
-  <a-modal v-model:visible="editVisible" title="Basic Modal" @ok="editHandleOk" :loading="editLoading">
+
+  <a-modal v-model:visible="editVisible" title="Basic Modal" @ok="edit" :loading="editLoading">
     <a-form>
       <a-form-item label="Cover">
         <a-input v-model:value="ebook.cover" />
@@ -39,6 +44,7 @@
 <script lang="ts">
 import axios from 'axios';
 import { ref, defineComponent, onMounted } from 'vue';
+import { message } from 'ant-design-vue';
 
 const columns = [
   {
@@ -109,7 +115,7 @@ export default defineComponent({
         const $ = res.data.content
         ebooks.value = $.list
         pagination.value.current = params.page
-        pagination.value.total = $.total
+        pagination.value.total = parseInt($.total)
         loading.value = false
       })
     }
@@ -119,7 +125,7 @@ export default defineComponent({
         size: pagination.value.pageSize
       })
     }
-    const editHandleOk = () => {
+    const edit = () => {
       editLoading.value = true
       axios.post('/ebook/save', ebook.value).then((res) => {
         const $ = res.data
@@ -140,6 +146,31 @@ export default defineComponent({
       editVisible.value = true
       ebook.value = record
     }
+    const add = () => {
+      editVisible.value = true
+      ebook.value = {}
+    }
+    const del = (id: string) => {
+      axios.delete(`/ebook/delete/${id}`).then((res) => {
+        const $ = res.data
+        if ($.success) {
+          setTimeout(() => {
+            queryData({
+              page: pagination.value.current,
+              size: pagination.value.pageSize
+            })
+          }, 1000)
+        }
+      })
+    }
+    const confirmDelete = (id: string) => {
+      del(id)
+      message.success('delete confirmed');
+    };
+
+    const cancelDelete = () => {
+      message.error('delete canceled');
+    };
 
     onMounted(() => {
       queryData({ page: 1, size: pagination.value.pageSize })
@@ -151,11 +182,14 @@ export default defineComponent({
       columns,
       handleTableChange,
 
+      add,
+      edit,
+      confirmDelete,
+      cancelDelete,
       ebook,
       editVisible,
       editLoading,
       showEditModal,
-      editHandleOk
     }
   }
 })
