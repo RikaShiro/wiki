@@ -6,7 +6,7 @@
         <img src="/image/cover1.png">
       </template>
       <template v-else-if="column.key === 'action'">
-        <a-button type="primary" @click="showEditModal">Edit</a-button>
+        <a-button type="primary" @click="showEditModal(record)">Edit</a-button>
         <a-button danger>Delete</a-button>
       </template>
       <template v-else>
@@ -15,7 +15,23 @@
     </template>
   </a-table>
   <a-modal v-model:visible="editVisible" title="Basic Modal" @ok="editHandleOk">
-    <p>Edit</p>
+    <a-form>
+      <a-form-item label="Cover">
+        <a-input v-model:value="ebook.cover" />
+      </a-form-item>
+      <a-form-item label="Name">
+        <a-input v-model:value="ebook.name" />
+      </a-form-item>
+      <a-form-item label="Category 1">
+        <a-input v-model:value="ebook.category1Id" />
+      </a-form-item>
+      <a-form-item label="Category 2">
+        <a-input v-model:value="ebook.category2Id" />
+      </a-form-item>
+      <a-form-item label="Description">
+        <a-input v-model:value="ebook.description" />
+      </a-form-item>
+    </a-form>
   </a-modal>
 </template>
 
@@ -69,6 +85,7 @@ const columns = [
 export default defineComponent({
   name: 'Admin',
   setup() {
+    const ebook: any = ref({})
     const ebooks = ref([])
     const loading = ref(false)
     const pagination = ref({
@@ -102,9 +119,11 @@ export default defineComponent({
     const editHandleOk = () => {
       editVisible.value = false
     }
-    const showEditModal = () => {
+    const showEditModal = (record: any) => {
       editVisible.value = true
+      ebook.value = record
     }
+
     onMounted(() => {
       queryData({ page: 1, size: pagination.value.pageSize })
     })
@@ -115,6 +134,7 @@ export default defineComponent({
       columns,
       handleTableChange,
 
+      ebook,
       editVisible,
       showEditModal,
       editHandleOk
