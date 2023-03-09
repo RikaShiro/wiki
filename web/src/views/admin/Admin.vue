@@ -1,5 +1,15 @@
 <template>
-  <a-button type="primary" size="large" @click="add">Add</a-button>
+  <a-form layout="inline" :v-model="searchKey">
+    <a-form-item>
+      <a-input v-model:value="searchKey.name" />
+    </a-form-item>
+    <a-form-item>
+      <a-button type="primary" size="large" @click="search">Search</a-button>
+    </a-form-item>
+    <a-form-item>
+      <a-button type="primary" size="large" @click="add">Add</a-button>
+    </a-form-item>
+  </a-form>
 
   <a-table :columns="columns" :data-source="ebooks" :pagination="pagination" :loading="loading"
     @change="handleTableChange">
@@ -100,6 +110,7 @@ export default defineComponent({
       pageSize: 10,
       total: 0
     })
+    const searchKey: any = ref({})
 
     const editLoading = ref(false)
     const editVisible = ref(false)
@@ -109,7 +120,8 @@ export default defineComponent({
       axios.get('/ebook/list', {
         params: {
           page: params.page,
-          size: params.size
+          size: params.size,
+          name: searchKey.value.name
         }
       }).then((res) => {
         const $ = res.data
@@ -173,10 +185,15 @@ export default defineComponent({
       del(id)
       message.success('delete confirmed');
     };
-
     const cancelDelete = () => {
       message.error('delete canceled');
     };
+    const search = () => {
+      queryData({
+        page: pagination.value.current,
+        size: pagination.value.pageSize
+      })
+    }
 
     onMounted(() => {
       queryData({ page: 1, size: pagination.value.pageSize })
@@ -188,6 +205,8 @@ export default defineComponent({
       columns,
       handleTableChange,
 
+      search,
+      searchKey,
       add,
       edit,
       confirmDelete,
