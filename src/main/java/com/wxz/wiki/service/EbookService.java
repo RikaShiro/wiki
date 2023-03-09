@@ -12,8 +12,9 @@ import com.github.pagehelper.PageInfo;
 import com.wxz.wiki.domain.Ebook;
 import com.wxz.wiki.domain.EbookExample;
 import com.wxz.wiki.mapper.EbookMapper;
-import com.wxz.wiki.req.EbookReq;
-import com.wxz.wiki.resp.EbookResp;
+import com.wxz.wiki.req.EbookQueryReq;
+import com.wxz.wiki.req.EbookSaveReq;
+import com.wxz.wiki.resp.EbookQueryResp;
 import com.wxz.wiki.resp.PageResp;
 import com.wxz.wiki.util.CopyUtil;
 
@@ -26,7 +27,7 @@ public class EbookService {
   @Resource
   private EbookMapper ebookMapper;
 
-  public PageResp<EbookResp> list(EbookReq req) {
+  public PageResp<EbookQueryResp> list(EbookQueryReq req) {
     EbookExample ebookExample = new EbookExample();
     if (!ObjectUtils.isEmpty(req.getName())) {
       EbookExample.Criteria criteria = ebookExample.createCriteria();
@@ -38,10 +39,20 @@ public class EbookService {
     PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
     LOG.info("row count: {}", pageInfo.getTotal());
     LOG.info("page count: {}", pageInfo.getPages());
-    
-    PageResp<EbookResp> pageResp = new PageResp();
+
+    PageResp<EbookQueryResp> pageResp = new PageResp();
     pageResp.setTotal(pageInfo.getTotal());
-    pageResp.setList(CopyUtil.copyList(ebookList, EbookResp.class));
+    pageResp.setList(CopyUtil.copyList(ebookList, EbookQueryResp.class));
     return pageResp;
+  }
+
+  // update or add
+  public void save(EbookSaveReq req) {
+    Ebook ebook = CopyUtil.copy(req, Ebook.class);
+    if (ObjectUtils.isEmpty(req.getId())) {
+      ebookMapper.insert(ebook);
+    } else {
+      ebookMapper.updateByPrimaryKey(ebook);
+    }
   }
 }

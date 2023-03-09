@@ -14,7 +14,8 @@
       </template>
     </template>
   </a-table>
-  <a-modal v-model:visible="editVisible" title="Basic Modal" @ok="editHandleOk">
+  
+  <a-modal v-model:visible="editVisible" title="Basic Modal" @ok="editHandleOk" :loading="editLoading">
     <a-form>
       <a-form-item label="Cover">
         <a-input v-model:value="ebook.cover" />
@@ -93,6 +94,8 @@ export default defineComponent({
       pageSize: 10,
       total: 0
     })
+
+    const editLoading = ref(false)
     const editVisible = ref(false)
 
     const queryData = (params: any) => {
@@ -117,7 +120,21 @@ export default defineComponent({
       })
     }
     const editHandleOk = () => {
-      editVisible.value = false
+      editLoading.value = true
+      axios.post('/ebook/save', ebook.value).then((res) => {
+        const $ = res.data
+        if ($.success) {
+          setTimeout(() => {
+            editLoading.value = false
+            editVisible.value = false
+            // reload list
+            queryData({
+              page: pagination.value.current,
+              size: pagination.value.pageSize
+            })
+          }, 1000)
+        }
+      })
     }
     const showEditModal = (record: any) => {
       editVisible.value = true
@@ -136,6 +153,7 @@ export default defineComponent({
 
       ebook,
       editVisible,
+      editLoading,
       showEditModal,
       editHandleOk
     }
